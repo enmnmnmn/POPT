@@ -3,14 +3,17 @@ package top.o_illusions.popt.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.minecraft.block.ConcretePowderBlock;
+import net.minecraft.block.RedstoneWireBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
+import net.minecraft.entity.TntEntity;
+import net.minecraft.item.BowItem;
+import net.minecraft.item.EnderPearlItem;
 import net.minecraft.util.math.*;
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 
 public class PoptClient implements ClientModInitializer {
 
@@ -22,7 +25,6 @@ public class PoptClient implements ClientModInitializer {
             render(matrixStack, camera);
         });
     }
-
 
 
     public void render(MatrixStack matrixStack, Camera camera) {
@@ -51,7 +53,57 @@ public class PoptClient implements ClientModInitializer {
 
 
 
+
         Matrix4f modelMatrix = matrixStack.peek().getPositionMatrix();
+
+        builder.vertex(modelMatrix, 0, 1, 0).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 0, 1, 1).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 1, 1, 1).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 1, 1, 0).color(0x80FFFFFF);
+
+        builder.vertex(modelMatrix, 0, 0, 0).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 1, 0, 0).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 1, 0, 1).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 0, 0, 1).color(0x80FFFFFF);
+
+        builder.vertex(modelMatrix, 1, 0, 0).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 1, 1, 0).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 1, 1, 1).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 1, 0, 1).color(0x80FFFFFF);
+
+        builder.vertex(modelMatrix, 0, 0, 0).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 0, 0, 1).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 0, 1, 1).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 0, 1, 0).color(0x80FFFFFF);
+
+        builder.vertex(modelMatrix, 0, 0, 1).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 1, 0, 1).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 1, 1, 1).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 0, 1, 1).color(0x80FFFFFF);
+
+        builder.vertex(modelMatrix, 0, 0, 0).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 0, 1, 0).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 1, 1, 0).color(0x80FFFFFF);
+        builder.vertex(modelMatrix, 1, 0, 0).color(0x80FFFFFF);
+
+
+        BufferRenderer.drawWithGlobalProgram(builder.end());
+
+        renderLine(matrixStack, modelMatrix);
+
+        matrixStack.pop();
+
+        RenderSystem.disableBlend();
+
+//        renderLine(matrixStack, modelMatrix);
+    }
+
+    public void renderLine(MatrixStack matrixStack,  Matrix4f modelMatrix) {
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder builder = tessellator.begin(VertexFormat.DrawMode.LINES, VertexFormats.POSITION_COLOR);
+
+        RenderSystem.enableBlend();
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 
         builder.vertex(modelMatrix, 0, 1, 0).color(0x80FFFFFF);
         builder.vertex(modelMatrix, 0, 1, 1).color(0x80FFFFFF);
